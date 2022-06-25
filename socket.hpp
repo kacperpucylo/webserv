@@ -15,7 +15,8 @@ class Socket{
 
 		Socket &operator=(Socket const &other);
 
-		int socket_listen();
+		int s_listen();
+		int s_handle();
 };
 
 #endif

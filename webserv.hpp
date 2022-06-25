@@ -6,5 +6,10 @@
 #include <cstdlib> // For exit() and EXIT_FAILURE
 #include <iostream> // For cout
 #include <unistd.h> // For read
+#include "socket.hpp"
+
+class Socket;
+
+int socket_handle(Socket const &sock);
 
 #endif

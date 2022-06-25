@@ -8,13 +8,11 @@ int main() {
 			std::cout << "failed to establish connection\n";
 			exit(EXIT_FAILURE);
 		}
-		new_socket.s_handle();
+		socket_handle(new_socket);
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 		exit(EXIT_FAILURE);
 	}
-
-	
 }

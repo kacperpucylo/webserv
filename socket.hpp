@@ -15,8 +15,10 @@ class Socket{
 
 		Socket &operator=(Socket const &other);
 
-		int s_listen();
-		int s_handle();
+		int	socket_fd() const;
+		int accept_request() const;
+		int s_listen() const;
+		int handle_request(int connection) const;
 };
 
 #endif

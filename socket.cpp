@@ -20,7 +20,11 @@ Socket &Socket::operator=(Socket const &other){
 	return *this;
 }
 
-int Socket::s_listen(){
+int	Socket::socket_fd() const {
+	return _sockfd;
+}
+
+int Socket::s_listen() const {
 	if (listen(_sockfd, 10) < 0) {
 		std::cout << "Failed to listen on socket. errno: " << errno << std::endl;
 		return -1;
@@ -28,55 +32,32 @@ int Socket::s_listen(){
 	return 0;
 }
 
-int Socket::s_handle(){
-
-	fd_set current_sockets, ready_sockets;
-	FD_ZERO(&current_sockets);
-	FD_SET(_sockfd, &current_sockets);
-
-	int connection = 0;
-	int max_requests_to_check = _sockfd;
-
-	while(1){
-		ready_sockets = current_sockets;
-
-		if (select(FD_SETSIZE, &ready_sockets, NULL, NULL, NULL) < 0)
-			throw std::runtime_error(strerror(errno));
-		for (int i = 0; i <= max_requests_to_check; i++)
-		{
-			if (FD_ISSET(i, &ready_sockets)){
-				if (i == _sockfd){
-					socklen_t addrlen = sizeof(sockaddr);
-					connection = accept(_sockfd, (struct sockaddr*)&_sockaddr, (socklen_t*)&addrlen);
-					if (connection < 0) {
-						std::cout << "Failed to grab connection. errno: " << errno << std::endl;
-						return -1;
-					}
-					if (connection > max_requests_to_check)
-						max_requests_to_check = connection;
-					FD_SET(connection, &current_sockets);
-				}
-				else{
-					// Handle request 
-					char buffer[100];
-					ssize_t bytesRead;
-					bzero(buffer, 100);
-					if ((bytesRead= read(connection, buffer, 100)) == -1) {
-						perror("read");
-						return -1;
-					}
-					std::cout << "The message was: " << buffer;
-
-					// Send a message to the connection
-					std::string response = "Good talking to you\n";
-					send(connection, response.c_str(), response.size(), 0);
-
-					// Close the connections
-					FD_CLR(connection, &current_sockets);
-					close(connection);
-				}
-			}
-		}
+int Socket::accept_request() const {
+	socklen_t addrlen = sizeof(sockaddr);
+	int connection = accept(_sockfd, (struct sockaddr*)&_sockaddr, (socklen_t*)&addrlen);
+	if (connection < 0) {
+		std::cout << "Failed to grab connection. errno: " << errno << std::endl;
+		return -1;
 	}
+	return connection;
+}
+
+int Socket::handle_request(int connection) const {
+	// Handle request 
+	char buffer[100];
+	ssize_t bytesRead;
+	bzero(buffer, 100);
+	if ((bytesRead= read(connection, buffer, 100)) == -1) {
+		perror("read");
+		return -1;
+	}
+	std::cout << "The message was: " << buffer;
+
+	// Send a message to the connection
+	std::string response = "Good talking to you\n";
+	send(connection, response.c_str(), response.size(), 0);
+
+	// Close the connections
+	close(connection);
 	return 0;
 }

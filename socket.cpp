@@ -35,13 +35,14 @@ int Socket::s_handle(){
 	FD_SET(_sockfd, &current_sockets);
 
 	int connection = 0;
+	int max_requests_to_check = _sockfd;
 
 	while(1){
 		ready_sockets = current_sockets;
 
 		if (select(FD_SETSIZE, &ready_sockets, NULL, NULL, NULL) < 0)
 			throw std::runtime_error(strerror(errno));
-		for (int i = 0; i <= 25; i++)
+		for (int i = 0; i <= max_requests_to_check; i++)
 		{
 			if (FD_ISSET(i, &ready_sockets)){
 				if (i == _sockfd){
@@ -51,10 +52,12 @@ int Socket::s_handle(){
 						std::cout << "Failed to grab connection. errno: " << errno << std::endl;
 						return -1;
 					}
+					if (connection > max_requests_to_check)
+						max_requests_to_check = connection;
 					FD_SET(connection, &current_sockets);
 				}
 				else{
-					// Read from the connection 
+					// Handle request 
 					char buffer[100];
 					ssize_t bytesRead;
 					bzero(buffer, 100);
@@ -72,13 +75,8 @@ int Socket::s_handle(){
 					FD_CLR(connection, &current_sockets);
 					close(connection);
 				}
-
 			}
-
 		}
-		
 	}
-
-	
 	return 0;
 }

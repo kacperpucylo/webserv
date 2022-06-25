@@ -5,6 +5,10 @@ int main() {
 	{
 		Socket new_socket;
 		int connection = new_socket.socket_listen();
+		if (connection == -1){
+			std::cout << "failed to establish connection\n";
+			exit(EXIT_FAILURE);
+		}
 		// Read from the connection
 		char buffer[100];
 		ssize_t bytesRead;

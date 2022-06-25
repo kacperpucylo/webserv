@@ -6,7 +6,7 @@
 #    By: mchatzip <mchatzip@student.42wolfsburg.de> +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/21 14:41:30 by mchatzip          #+#    #+#              #
-#    Updated: 2022/06/24 17:44:04 by mchatzip         ###   ########.fr        #
+#    Updated: 2022/06/25 10:30:44 by mchatzip         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ RM		= rm -f
 
 NAME	= webserv
 
-SRC		= main.cpp
+SRC		= main.cpp socket.cpp
 
 OBJ		= ${SRC:.c=.o}
 

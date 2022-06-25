@@ -43,21 +43,6 @@ int Socket::accept_request() const {
 }
 
 int Socket::handle_request(int connection) const {
-	// Handle request 
-	char buffer[100];
-	ssize_t bytesRead;
-	bzero(buffer, 100);
-	if ((bytesRead= read(connection, buffer, 100)) == -1) {
-		perror("read");
-		return -1;
-	}
-	std::cout << "The message was: " << buffer;
-
-	// Send a message to the connection
-	std::string response = "Good talking to you\n";
-	send(connection, response.c_str(), response.size(), 0);
-
-	// Close the connections
-	close(connection);
-	return 0;
+	std::cout << "Attempted to call abstract class function with argument:" << connection << std::endl;
+	return -1;
 }

@@ -3,7 +3,7 @@
 int main() {
 	try
 	{
-		Socket new_socket;
+		dummy_socket new_socket;
 		if (new_socket.s_listen() == -1){
 			std::cout << "failed to establish connection\n";
 			exit(EXIT_FAILURE);

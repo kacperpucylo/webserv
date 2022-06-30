@@ -1,10 +1,12 @@
 #include "socket.hpp"
 
-int main() {
+int main()
+{
 	try
 	{
 		dummy_socket new_socket;
-		if (new_socket.s_listen() == -1){
+		if (new_socket.s_listen() == -1)
+		{
 			std::cout << "failed to establish connection\n";
 			exit(EXIT_FAILURE);
 		}

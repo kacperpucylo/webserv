@@ -1,16 +1,19 @@
 #include "socket.hpp"
 
-int socket_handle(Socket const &sock){
-
+int socket_handle(Socket const &sock)
+{
 	fd_set current_sockets, ready_sockets;
 	int curr_socket = sock.socket_fd();
 	FD_ZERO(&current_sockets);
 	FD_SET(curr_socket, &current_sockets);
-
+	
 	int connection = 0;
 	int max_requests_to_check = curr_socket;
 
-	while(1){
+	char hello[] = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
+
+	while(1)
+	{
 		ready_sockets = current_sockets;
 
 		if (select(FD_SETSIZE, &ready_sockets, NULL, NULL, NULL) < 0)
@@ -23,6 +26,7 @@ int socket_handle(Socket const &sock){
 						throw std::runtime_error("connection failed");
 					if (connection > max_requests_to_check)
 						max_requests_to_check = connection;
+					send(connection, hello, strlen(hello), 0);
 					FD_SET(connection, &current_sockets);
 				}
 				else{

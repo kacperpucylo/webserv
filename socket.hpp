@@ -3,7 +3,8 @@
 
 #include "webserv.hpp"
 
-class Socket{
+class Socket
+{
 	protected:
 		int _sockfd;
 		sockaddr_in _sockaddr;
@@ -23,28 +24,32 @@ class Socket{
 
 
 //class demostrating inheritance of abstract class Socket
-class dummy_socket : virtual public Socket{
+class dummy_socket : virtual public Socket
+{
 	
 	public:
 		dummy_socket(){}
-		dummy_socket(dummy_socket const &other){
+		dummy_socket(dummy_socket const &other)
+		{
 			_sockaddr = other._sockaddr;
 			_sockfd = other._sockfd;
 		};
 		virtual~dummy_socket(){}
 
-		dummy_socket &operator=(dummy_socket const &other){
+		dummy_socket &operator=(dummy_socket const &other)
+		{
 			_sockaddr = other._sockaddr;
 			_sockfd = other._sockfd;
 			return *this;
 		}
 
-		int handle_request(int connection) const {
-			// Handle request 
-				char buffer[100];
+		int handle_request(int connection) const
+		{
+			// Handle request
+				char buffer[256] = {0};
 				ssize_t bytesRead;
-				bzero(buffer, 100);
-				if ((bytesRead= read(connection, buffer, 100)) == -1) {
+				if ((bytesRead= read(connection, buffer, 256)) == -1)
+				{
 					perror("read");
 					return -1;
 				}
@@ -55,6 +60,7 @@ class dummy_socket : virtual public Socket{
 				send(connection, response.c_str(), response.size(), 0);
 
 				// Close the connections
+				
 				close(connection);
 				return 0;
 		}

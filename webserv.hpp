@@ -8,11 +8,6 @@
 #include <unistd.h> // For read
 #include <fcntl.h> // For fcntl
 #include <netdb.h> // For addrinfo
-#include <arpa/inet.h> // For inet_ntop
-#include "socket.hpp"
-
-class Socket;
-
-int socket_handle(Socket const &sock);
+#include <map>
 
 #endif
